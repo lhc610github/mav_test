@@ -23,7 +23,7 @@ using namespace mavplugin;
 
 
 MavRos::MavRos() :
-	mavlink_nh("mavlink"),		// allow to namespace it
+	mavlink_nh("~/mavlink"),		// allow to namespace it
 	fcu_link_diag("FCU connection"),
 	gcs_link_diag("GCS bridge"),
 	plugin_loader("mavros", "mavplugin::MavRosPlugin"),

@@ -19,6 +19,7 @@
 #include <pluginlib/class_list_macros.h>
 #include <eigen_conversions/eigen_msg.h>
 
+#include <geometry_msgs/PoseStamped.h>
 #include <mavros_msgs/AttitudeTarget.h>
 #include <mavros_msgs/PositionTarget.h>
 #include <mavros_msgs/GlobalPositionTarget.h>
@@ -50,6 +51,8 @@ public:
 		target_local_pub = sp_nh.advertise<mavros_msgs::PositionTarget>("target_local", 10);
 		target_global_pub = sp_nh.advertise<mavros_msgs::GlobalPositionTarget>("target_global", 10);
 		target_attitude_pub = sp_nh.advertise<mavros_msgs::AttitudeTarget>("target_attitude", 10);
+		target_local_pub1 = sp_nh.advertise<geometry_msgs::PoseStamped>("target_local_rviz", 10);
+
 	}
 
 	const message_map get_rx_handlers() {
@@ -66,7 +69,7 @@ private:
 	UAS *uas;
 
 	ros::Subscriber local_sub, global_sub, attitude_sub;
-	ros::Publisher target_local_pub, target_global_pub, target_attitude_pub;
+	ros::Publisher target_local_pub, target_global_pub, target_attitude_pub, target_local_pub1;
 
 	/* -*- message handlers -*- */
 	void handle_position_target_local_ned(const mavlink_message_t *msg, uint8_t sysid, uint8_t compid) {
@@ -81,16 +84,18 @@ private:
 		float yaw_rate = UAS::transform_frame_yaw_ned_enu(tgt.yaw_rate);
 
 		auto target = boost::make_shared<mavros_msgs::PositionTarget>();
-
+		auto pose1 = boost::make_shared<geometry_msgs::PoseStamped>();
+		pose1->header.stamp = uas->synchronise_stamp(tgt.time_boot_ms);
 		target->header.stamp = uas->synchronise_stamp(tgt.time_boot_ms);
 		target->coordinate_frame = tgt.coordinate_frame;
 		target->type_mask = tgt.type_mask;
 		tf::pointEigenToMsg(position, target->position);
+		tf::pointEigenToMsg(position, pose1->pose.position);
 		tf::vectorEigenToMsg(velocity, target->velocity);
 		tf::vectorEigenToMsg(af, target->acceleration_or_force);
 		target->yaw = yaw;
 		target->yaw_rate = yaw_rate;
-
+		target_local_pub1.publish(pose1);
 		target_local_pub.publish(target);
 	}
 

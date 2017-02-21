@@ -23,12 +23,12 @@ using namespace mavros;
 // +PI rotation around X (North) axis follwed by +PI/2 rotation about Z (Down)
 // gives the ENU frame.  Similarly, a +PI rotation about X (East) followed by
 // a +PI/2 roation about Z (Up) gives the NED frame.
-static const Eigen::Quaterniond NED_ENU_Q = UAS::quaternion_from_rpy(M_PI, 0.0, M_PI_2);
+static const Eigen::Quaterniond NED_ENU_Q = UAS::quaternion_from_rpy(M_PI, 0.0, M_PI);//M_PI_2
 
 // Static quaternion needed for rotating between aircraft and base_link frames
 // +PI rotation around X (Forward) axis transforms from Forward, Right, Down (aircraft)
 // Fto Forward, Left, Up (base_link) frames.
-static const Eigen::Quaterniond AIRCRAFT_BASELINK_Q = UAS::quaternion_from_rpy(M_PI, 0.0, 0.0);
+static const Eigen::Quaterniond AIRCRAFT_BASELINK_Q = UAS::quaternion_from_rpy(0.0, 0.0, 0.0);//M_PI, 0.0, 0.0
 
 static const Eigen::Affine3d NED_ENU_AFFINE(NED_ENU_Q);
 static const Eigen::Affine3d AIRCRAFT_BASELINK_AFFINE(AIRCRAFT_BASELINK_Q);
@@ -69,7 +69,7 @@ Eigen::Quaterniond UAS::transform_orientation(const Eigen::Quaterniond &q, const
 	}
 	case STATIC_TRANSFORM::AIRCRAFT_TO_BASELINK:
 	case STATIC_TRANSFORM::BASELINK_TO_AIRCRAFT: {
-		return q * AIRCRAFT_BASELINK_Q;
+		return q * NED_ENU_Q.inverse();//AIRCRAFT_BASELINK_Q;
 		break;
 	}
 	default: {

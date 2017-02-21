@@ -1,6 +1,8 @@
 plugin_blacklist:
 # common
 - safety_area
+- param
+- waypoint
 # extras
 - image_pub
 - vibration

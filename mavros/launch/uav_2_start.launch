@@ -1,0 +1,11 @@
+<launch>
+	<node pkg="rqt_gui" name="gui" type="rqt_gui" output="screen" />
+	
+	<include file="$(find mavros)/launch/px4_wifi_uav1.launch">
+		<arg name="log_output" value="screen" />
+	</include>
+	
+	<include file="$(find mavros)/launch/px4_wifi_uav2.launch">
+		<arg name="log_output" value="screen" />
+	</include>
+</launch>

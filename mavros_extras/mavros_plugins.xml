@@ -23,4 +23,13 @@
         <class name="cam_imu_sync" type="mavplugin::CamIMUSyncPlugin" base_class_type="mavplugin::MavRosPlugin">
 		<description>Publish camera trigger data for synchronisation of IMU and camera frames</description>
 	</class>
+	<class name="uav_pos_feedback" type="mavplugin::UavPosFeedbackPlugin" base_class_type="mavplugin::MavRosPlugin">
+		<description>send mocap date to pixhawk</description>
+	</class>
+	 <class name="uav_pos_set" type="mavplugin::UavPosSetPlugin" base_class_type="mavplugin::MavRosPlugin">
+		<description>send code to pixhawk</description>
+	</class>
+	<class name="uav_lde" type="mavplugin::UavLdePlugin" base_class_type="mavplugin::MavRosPlugin">
+		<description>send code to pixhawk</description>
+	</class>
 </library>

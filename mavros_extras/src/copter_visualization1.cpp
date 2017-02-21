@@ -22,10 +22,6 @@
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
 
-#include <mavros_msgs/AttitudeTarget.h>
-#include <mavros_msgs/PositionTarget.h>
-#include <mavros_msgs/GlobalPositionTarget.h>
-
 // parameters
 static std::string fixed_frame_id;
 static std::string child_frame_id;
@@ -93,11 +89,11 @@ static void publish_wp_marker(const geometry_msgs::PoseStamped::ConstPtr &wp)
 		marker->scale.z = marker_scale * 0.08;//0.1;
 
 		marker->color.a = 1.0;
-		marker->color.r = 0.6;
-		marker->color.g = 0.6;
-		marker->color.b = 0.6;
+		marker->color.r = 0.0;
+		marker->color.g = 1.0;
+		marker->color.b = 0.0;
 	}
-	
+
 	marker->pose = wp->pose;
 	//marker->points[1] = wp->pose.position;
 	wp_marker_pub.publish(marker);
@@ -205,7 +201,7 @@ void setpoint_local_pos_sub_cb(const geometry_msgs::PoseStamped::ConstPtr &wp)
 
 int main(int argc, char *argv[])
 {
-	ros::init(argc, argv, "copter_visualization");
+	ros::init(argc, argv, "copter_visualization2");
 	ros::NodeHandle nh;
 	ros::NodeHandle priv_nh("~");
 
@@ -213,7 +209,7 @@ int main(int argc, char *argv[])
 	double arm_len, body_width, body_height;
 
 	priv_nh.param<std::string>("fixed_frame_id", fixed_frame_id, "local_origin");
-	priv_nh.param<std::string>("child_frame_id", child_frame_id, "fcu");
+	priv_nh.param<std::string>("child_frame_id", child_frame_id, "fcu1");
 
 	priv_nh.param("marker_scale", marker_scale, 1.0);
 	priv_nh.param("num_rotors", num_rotors, 4);
@@ -224,12 +220,12 @@ int main(int argc, char *argv[])
 
 	create_vehicle_markers( num_rotors, arm_len, body_width, body_height );
 
-	track_marker_pub = nh.advertise<visualization_msgs::Marker>("track_markers", 10);
-	vehicle_marker_pub = nh.advertise<visualization_msgs::MarkerArray>("vehicle_marker", 10);
-	wp_marker_pub = nh.advertise<visualization_msgs::Marker>("wp_markers", 10);
+	track_marker_pub = nh.advertise<visualization_msgs::Marker>("track_markers1", 10);
+	vehicle_marker_pub = nh.advertise<visualization_msgs::MarkerArray>("vehicle_marker1", 10);
+	wp_marker_pub = nh.advertise<visualization_msgs::Marker>("wp_markers1", 10);
 
-	auto pos_sub = nh.subscribe("/mavros/local_position/pose", 10, local_position_sub_cb);
-	auto wp_sub = nh.subscribe("/mavros/setpoint_raw/target_local_rviz", 10, setpoint_local_pos_sub_cb);
+	auto pos_sub = nh.subscribe("/mavros1/local_position/pose", 10, local_position_sub_cb);
+	auto wp_sub = nh.subscribe("/mavros1/setpoint_raw/target_local_rviz", 10, setpoint_local_pos_sub_cb);
 
 	ros::spin();
 	return 0;

@@ -1,0 +1,4 @@
+<launch>  
+     <node pkg="mavros_extras" name="mavros_extras_rviz1" type="copter_visualization1" output="screen" />
+     <node pkg="mavros_extras" name="mavros_extras_rviz2" type="copter_visualization2" output="screen" />
+</launch> 

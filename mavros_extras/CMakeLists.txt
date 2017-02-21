@@ -20,7 +20,9 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 find_package(Boost REQUIRED COMPONENTS system)
-
+########################
+find_package(demo_test)
+########################
 find_package(Eigen3)
 if(NOT EIGEN3_FOUND)
   # Fallback to cmake_modules
@@ -63,6 +65,9 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${mavlink_INCLUDE_DIRS}
+    ################
+  ${demo_test_INCLUDE_DIRS}
+  ################
 )
 
 add_library(mavros_extras
@@ -74,10 +79,18 @@ add_library(mavros_extras
   src/plugins/vision_speed_estimate.cpp
   src/plugins/vibration.cpp
   src/plugins/cam_imu_sync.cpp
+    #########
+  src/plugins/uav_pos_feedback.cpp
+  src/plugins/uav_pos_set.cpp 
+  src/plugins/uav_lde.cpp
+  #########
 )
 target_link_libraries(mavros_extras
   ${mavros_LIBRARIES}
   ${catkin_LIBRARIES}
+  ######
+    ${demo_test_LIBRARIES}
+######
 )
 
 ## Declare a cpp executable
@@ -93,6 +106,20 @@ add_executable(copter_visualization
   src/copter_visualization.cpp
 )
 target_link_libraries(copter_visualization
+  ${catkin_LIBRARIES}
+)
+
+add_executable(copter_visualization1
+  src/copter_visualization1.cpp
+)
+target_link_libraries(copter_visualization1
+  ${catkin_LIBRARIES}
+)
+
+add_executable(copter_visualization2
+  src/copter_visualization2.cpp
+)
+target_link_libraries(copter_visualization2
   ${catkin_LIBRARIES}
 )
 
@@ -119,7 +146,7 @@ install(PROGRAMS
 )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS mavros_extras gcs_image_bridge copter_visualization servo_state_publisher
+install(TARGETS mavros_extras gcs_image_bridge copter_visualization copter_visualization1 copter_visualization2 servo_state_publisher
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

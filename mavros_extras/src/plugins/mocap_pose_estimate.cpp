@@ -77,14 +77,25 @@ private:
 		(uint64_t usec,
 			float q[4],
 			float x, float y, float z)
-	{
+	{	float q2[4];
+		float posx;
+		float posy;
+		float posz;
 		mavlink_message_t msg;
+		q2[0] = q[0];
+		q2[1] = q[1];
+		q2[2] = -q[3];
+		q2[3] = -q[2];
+		//ROS_INFO("qw:%f qx:%f qy:%f qz:%f1113",q2[0],q2[1],q2[2],q2[3]);
+		posx = -x;
+		posy = -z;
+		posz = -y;
 		mavlink_msg_att_pos_mocap_pack_chan(UAS_PACK_CHAN(uas), &msg,
 				usec,
-				q,
-				x,
-				y,
-				z);
+				q2,
+				posx,
+				posy,
+				posz);
 		UAS_FCU(uas)->send_message(&msg);
 	}
 

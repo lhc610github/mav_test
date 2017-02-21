@@ -8,8 +8,8 @@ startup_px4_usb_quirk: true
 # sys_status & sys_time connection options
 conn:
   heartbeat_rate: 8.0    # send hertbeat rate in Hertz
-  timeout: 10.0          # hertbeat timeout in seconds
-  timesync_rate: 10.0    # TIMESYNC rate in Hertz (feature disabled if 0.0)
+  timeout: 5.0          # hertbeat timeout in seconds
+  timesync_rate: 5.0    # TIMESYNC rate in Hertz (feature disabled if 0.0)
   system_time_rate: 1.0  # send system time to FCU rate in Hertz (disabled if 0.0)
 
 # sys_status
@@ -61,11 +61,11 @@ imu:
 
 # local_position
 local_position:
-  frame_id: "fcu"
+  frame_id: "fcu3"
   tf:
     send: true   # false
     frame_id: "local_origin"
-    child_frame_id: "fcu"
+    child_frame_id: "fcu3"
 
 # param
 # None, used for FCU params
